@@ -1,21 +1,21 @@
-import { GetStaticProps } from "next"
-import Head from "next/head"
-import Image from "next/image"
-import Link from "next/link"
+import { GetStaticProps } from 'next'
+import Head from 'next/head'
+import Image from 'next/image'
+import Link from 'next/link'
 
 import { useKeenSlider } from 'keen-slider/react'
-import { HomeContainer, Product } from "@/styles/pages/home"
-import { stripe } from "@/lib/stripe"
+import { HomeContainer, Product } from '@/styles/pages/home'
+import { stripe } from '@/lib/stripe'
 
 import 'keen-slider/keen-slider.min.css'
-import Stripe from "stripe"
+import Stripe from 'stripe'
 
 interface HomeProps {
   products: {
-    id: string;
-    name: string;
-    imageUrl: string;
-    price: string;
+    id: string
+    name: string
+    imageUrl: string
+    price: string
   }[]
 }
 
@@ -24,7 +24,7 @@ export default function Home({ products }: HomeProps) {
     slides: {
       perView: 3,
       spacing: 48,
-    }
+    },
   })
 
   return (
@@ -34,9 +34,13 @@ export default function Home({ products }: HomeProps) {
       </Head>
 
       <HomeContainer ref={sliderRef} className="keen-slider">
-        {products.map(product => {
+        {products.map((product) => {
           return (
-            <Link href={`/product/${product.id}`} key={product.id} prefetch={false}>
+            <Link
+              href={`/product/${product.id}`}
+              key={product.id}
+              prefetch={false}
+            >
               <Product className="keen-slider__slide">
                 <Image src={product.imageUrl} width={520} height={480} alt="" />
                 <footer>
@@ -54,10 +58,10 @@ export default function Home({ products }: HomeProps) {
 
 export const getStaticProps: GetStaticProps = async () => {
   const response = await stripe.products.list({
-    expand: ['data.default_price']
+    expand: ['data.default_price'],
   })
 
-  const products = response.data.map(product => {
+  const products = response.data.map((product) => {
     const price = product.default_price as Stripe.Price
 
     return {
@@ -66,14 +70,14 @@ export const getStaticProps: GetStaticProps = async () => {
       imageUrl: product.images[0],
       price: new Intl.NumberFormat('pt-BR', {
         style: 'currency',
-        currency: 'BRL'
+        currency: 'BRL',
       }).format(price.unit_amount ? price.unit_amount / 100 : 0),
     }
   })
-  
+
   return {
     props: {
-      products
+      products,
     },
     revalidate: 60 * 60 * 2,
   }

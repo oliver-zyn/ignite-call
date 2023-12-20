@@ -1,7 +1,10 @@
-import { stripe } from "@/lib/stripe";
-import { NextApiRequest, NextApiResponse } from "next";
+import { stripe } from '@/lib/stripe'
+import { NextApiRequest, NextApiResponse } from 'next'
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse,
+) {
   const { priceId } = req.body
 
   if (req.method !== 'POST') {
@@ -23,11 +26,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       {
         price: priceId,
         quantity: 1,
-      }
-    ]
+      },
+    ],
   })
 
   return res.status(201).json({
-    checkoutUrl: checkoutSession.url
+    checkoutUrl: checkoutSession.url,
   })
 }
