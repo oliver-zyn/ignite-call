@@ -1,40 +1,47 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Ignite Shop
 
-## Getting Started
+<img src="https://github.com/oliver-zyn/ignite-shop/assets/89222905/4c597ad6-d2e9-4450-b4b8-348abff05949" width="600" />
 
-First, run the development server:
+## 📖 Sobre
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+Projeto criado durante as aulas da trilha Ignite da <a href="https://www.rocketseat.com.br">rocketseat</a>.
+
+A aplicação consiste em uma página que lista camisetas que estão disponíveis para compra, podendo adicioná-las a um carrinho e realizar a compra através da API do Stripe.
+
+Aplicação em produção: https://ignite-shop-oliverzyn.vercel.app
+
+## 💻 Tecnologias utilizadas
+
+- Next.js
+- Stitches
+- TypeScript
+- Phosphor Icons
+- Toastify
+- Axios
+- Keen-slider
+- Radix-UI
+- Stripe
+
+## ⚒️ Features
+
+- Listagem de camisetas disponíveis para compra
+- Adicionar camisetas no carrinho
+- Remover camisetas do carrinho
+- Redirecionamento para página de pagamento das camisetas
+- Página de informando que as camisetas foram compradas com sucesso
+
+## ⚙️ Executando o projeto
+
+Primeiramente, deve-se instalar todas as dependências:
+```
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
-
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
-
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Rodando o projeto:
+```
+npm run dev
+```
+Realizando build:
+```
+npm run build
+```
