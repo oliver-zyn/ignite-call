@@ -1,31 +1,52 @@
+import 'keen-slider/keen-slider.min.css'
+
+import { HomeContainer, Product } from '@/styles/pages/home'
+
 import { GetStaticProps } from 'next'
+import { Handbag } from 'phosphor-react'
 import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
-
-import { useKeenSlider } from 'keen-slider/react'
-import { HomeContainer, Product } from '@/styles/pages/home'
-import { stripe } from '@/lib/stripe'
-
-import 'keen-slider/keen-slider.min.css'
+import { MouseEvent } from 'react'
+import { ProductType } from '@/contexts/ShoppingCart'
 import Stripe from 'stripe'
+import { formatNumberToReal } from '@/utils/formatNumberToReal'
+import { stripe } from '@/lib/stripe'
+import { toast } from 'react-toastify'
+import { useKeenSlider } from 'keen-slider/react'
+import { useShoppingCart } from '@/hooks/useShoppingCart'
 
 interface HomeProps {
-  products: {
-    id: string
-    name: string
-    imageUrl: string
-    price: string
-  }[]
+  products: ProductType[]
 }
 
 export default function Home({ products }: HomeProps) {
+  const { addProductToCart, productNotExistsInCart } = useShoppingCart()
+
   const [sliderRef] = useKeenSlider({
     slides: {
       perView: 3,
       spacing: 48,
     },
   })
+
+  function handleAddProductToCart(
+    event: MouseEvent<HTMLButtonElement>,
+    product: ProductType,
+  ) {
+    event.preventDefault()
+
+    if (!addProductToCart(product)) return
+
+    toast.success('Adicionado à sacola!', {
+      position: 'top-right',
+      autoClose: 2000,
+      closeOnClick: true,
+      pauseOnHover: false,
+      draggable: true,
+      theme: 'dark',
+    })
+  }
 
   return (
     <>
@@ -44,8 +65,17 @@ export default function Home({ products }: HomeProps) {
               <Product className="keen-slider__slide">
                 <Image src={product.imageUrl} width={520} height={480} alt="" />
                 <footer>
-                  <strong>{product.name}</strong>
-                  <span>{product.price}</span>
+                  <div>
+                    <strong>{product.name}</strong>
+                    <span>{formatNumberToReal(product.price)}</span>
+                  </div>
+
+                  <button
+                    onClick={(event) => handleAddProductToCart(event, product)}
+                    disabled={productNotExistsInCart(product.id)}
+                  >
+                    <Handbag size={32} weight="bold" />
+                  </button>
                 </footer>
               </Product>
             </Link>
@@ -68,10 +98,9 @@ export const getStaticProps: GetStaticProps = async () => {
       id: product.id,
       name: product.name,
       imageUrl: product.images[0],
-      price: new Intl.NumberFormat('pt-BR', {
-        style: 'currency',
-        currency: 'BRL',
-      }).format(price.unit_amount ? price.unit_amount / 100 : 0),
+      price: price.unit_amount ? price.unit_amount / 100 : 0,
+      description: product.description,
+      defaultPriceId: price.id,
     }
   })
 

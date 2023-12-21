@@ -2,7 +2,6 @@ import { styled } from '..'
 
 export const HomeContainer = styled('main', {
   display: 'flex',
-  // gap: '3rem',
   width: '100%',
   maxWidth: 'calc(100vw - ((100vw - 1180px) / 2))',
   marginLeft: 'auto',
@@ -12,7 +11,6 @@ export const HomeContainer = styled('main', {
 export const Product = styled('div', {
   background: 'linear-gradient(180deg, #1ea483 0%, #7465d4 100%)',
   borderRadius: 8,
-  // padding: '0.25rem',
   cursor: 'pointer',
   position: 'relative',
   overflow: 'hidden',
@@ -30,7 +28,7 @@ export const Product = styled('div', {
     bottom: '0.25rem',
     left: '0.25rem',
     right: '0.25rem',
-    padding: '2rem',
+    padding: '1.25rem',
 
     borderRadius: 6,
 
@@ -44,15 +42,44 @@ export const Product = styled('div', {
     opacity: 0,
     transition: 'all 0.2s ease-in-out',
 
+    div: {
+      display: 'flex',
+      flexDirection: 'column',
+    },
+
     strong: {
       fontSize: '$lg',
       color: '$gray100',
+      lineHeight: 1.6,
     },
 
     span: {
       fontSize: '$xl',
       fontWeight: 'bold',
       color: '$green300',
+      lineHeight: 1.6,
+    },
+
+    button: {
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      width: '3.5rem',
+      height: '3.5rem',
+      border: 'none',
+      background: '$green500',
+      borderRadius: '6px',
+      cursor: 'pointer',
+      color: '$white',
+
+      '&:disabled': {
+        opacity: 0.7,
+        cursor: 'not-allowed',
+      },
+
+      '&:hover': {
+        backgroundColor: '$green300',
+      },
     },
   },
 

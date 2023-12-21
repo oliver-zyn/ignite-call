@@ -1,28 +1,50 @@
-import { stripe } from '@/lib/stripe'
+import { GetStaticPaths, GetStaticProps } from 'next'
 import {
   ImageContainer,
+  ProductAddCartButton,
+  ProductBuyButton,
   ProductContainer,
   ProductDetails,
 } from '@/styles/pages/product'
-import axios from 'axios'
-import { GetStaticPaths, GetStaticProps } from 'next'
+
 import Head from 'next/head'
 import Image from 'next/image'
-import { useState } from 'react'
+import { ProductType } from '@/contexts/ShoppingCart'
 import Stripe from 'stripe'
+import axios from 'axios'
+import { formatNumberToReal } from '@/utils/formatNumberToReal'
+import { stripe } from '@/lib/stripe'
+import { toast } from 'react-toastify'
+import { useShoppingCart } from '@/hooks/useShoppingCart'
+import { useState } from 'react'
 
 interface ProductProps {
   product: {
     id: string
     name: string
     imageUrl: string
-    price: string
+    price: number
     description: string
     defaultPriceId: string
   }
 }
 
 export default function Product({ product }: ProductProps) {
+  const { addProductToCart, productNotExistsInCart } = useShoppingCart()
+
+  function handleAddProductToCart(product: ProductType) {
+    if (!addProductToCart(product)) return
+
+    toast.success('Adicionado à sacola!', {
+      position: 'top-right',
+      autoClose: 2000,
+      closeOnClick: true,
+      pauseOnHover: false,
+      draggable: true,
+      theme: 'dark',
+    })
+  }
+
   const [isCreatingCheckoutSession, setIsCreatingCheckoutSession] =
     useState(false)
 
@@ -56,14 +78,25 @@ export default function Product({ product }: ProductProps) {
         </ImageContainer>
         <ProductDetails>
           <h1>{product.name}</h1>
-          <span>{product.price}</span>
+          <span>{formatNumberToReal(product.price)}</span>
           <p>{product.description}</p>
-          <button
+          <ProductBuyButton
             disabled={isCreatingCheckoutSession}
             onClick={handleBuyProduct}
           >
             Comprar agora
-          </button>
+          </ProductBuyButton>
+          {productNotExistsInCart(product.id) ? (
+            <ProductAddCartButton disabled={true}>
+              Produto já adicionado à sacola
+            </ProductAddCartButton>
+          ) : (
+            <ProductAddCartButton
+              onClick={() => handleAddProductToCart(product)}
+            >
+              Adicionar à sacola
+            </ProductAddCartButton>
+          )}
         </ProductDetails>
       </ProductContainer>
     </>
@@ -94,10 +127,7 @@ export const getStaticProps: GetStaticProps<any, { id: string }> = async ({
         id: product.id,
         name: product.name,
         imageUrl: product.images[0],
-        price: new Intl.NumberFormat('pt-BR', {
-          style: 'currency',
-          currency: 'BRL',
-        }).format(price.unit_amount ? price.unit_amount / 100 : 0),
+        price: price.unit_amount ? price.unit_amount / 100 : 0,
         description: product.description,
         defaultPriceId: price.id,
       },
