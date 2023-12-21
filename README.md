@@ -45,3 +45,10 @@ Realizando build:
 ```
 npm run build
 ```
+
+**OBS**: Deve ser criado um arquivo **.env.local** com as seguintes variáveis:
+```
+NEXT_URL=http://localhost:3000
+STRIPE_PUBLIC_KEY=inserir aqui sua chave pública do stripe
+STRIPE_SECRET_KEY=inserir aqui sua chave privada do stripe
+```
